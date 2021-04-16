@@ -20,6 +20,7 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
   const serviceCollection = client.db("cycleService").collection("services");
+  const adminCollection = client.db("cycleService").collection("admin");
 
   // add service
   app.post('/addService', (req, res) => {
@@ -48,6 +49,15 @@ client.connect(err => {
     serviceCollection.find({})
     .toArray((err, data) => {
       res.send(data);
+    })
+  })
+
+  //add admin
+  app.post('/addAdmin', (req, res) => {
+    const admin = req.body;
+    adminCollection.insertOne(admin)
+    .then(result => {
+      res.send(result.insertedCount > 0);
     })
   })
   
