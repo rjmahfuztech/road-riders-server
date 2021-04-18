@@ -73,9 +73,18 @@ client.connect(err => {
     })
   })
 
-  // get order
+  // get all order
   app.get('/orders', (req, res) => {
     orderCollection.find({})
+    .toArray((err, data) => {
+      res.send(data);
+    })
+  })
+
+  // get order by specific user
+  app.post('/orderByEmail', (req, res) => {
+    const email = req.body.email;
+    orderCollection.find({email: email})
     .toArray((err, data) => {
       res.send(data);
     })
@@ -104,6 +113,23 @@ client.connect(err => {
     adminCollection.insertOne(admin)
     .then(result => {
       res.send(result.insertedCount > 0);
+    })
+  })
+
+  // get admin
+  app.get('/admin', (req, res) => {
+    adminCollection.find({})
+    .toArray((err, data) => {
+      res.send(data);
+    })
+  })
+
+  // is admin
+  app.post('/isAdmin', (req, res) => {
+    const email = req.body.email;
+    adminCollection.find({email: email})
+    .toArray((err, admin) => {
+      res.send(admin.length > 0);
     })
   })
 
