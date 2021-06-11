@@ -31,7 +31,7 @@ client.connect(err => {
     const title = req.body.title;
     const price = req.body.price;
     const description = req.body.description;
-    
+
     const newImg = file.data;
     const insertImg = newImg.toString('base64');
 
@@ -40,27 +40,27 @@ client.connect(err => {
       size: file.size,
       img: Buffer.from(insertImg, 'base64')
     }
-    serviceCollection.insertOne({image, title, price, description})
-    .then(result => {
-      res.send(result.insertedCount > 0);
-    })
+    serviceCollection.insertOne({ image, title, price, description })
+      .then(result => {
+        res.send(result.insertedCount > 0);
+      })
 
   })
 
   // get service
   app.get('/services', (req, res) => {
     serviceCollection.find({})
-    .toArray((err, data) => {
-      res.send(data);
-    })
+      .toArray((err, data) => {
+        res.send(data);
+      })
 
     // find specific service
     app.get('/service/:id', (req, res) => {
       const id = req.params.id;
-      serviceCollection.find({_id: ObjectId(id)})
-      .toArray((err, singleService) => {
-        res.send(singleService[0]);
-      })
+      serviceCollection.find({ _id: ObjectId(id) })
+        .toArray((err, singleService) => {
+          res.send(singleService[0]);
+        })
     })
   })
 
@@ -68,80 +68,90 @@ client.connect(err => {
   app.post('/addOrder', (req, res) => {
     const newOrder = req.body;
     orderCollection.insertOne(newOrder)
-    .then(result => {
-      res.send(result.insertedCount > 0);
-    })
+      .then(result => {
+        res.send(result.insertedCount > 0);
+      })
   })
 
   // get all order
   app.get('/orders', (req, res) => {
     orderCollection.find({})
-    .toArray((err, data) => {
-      res.send(data);
-    })
+      .toArray((err, data) => {
+        res.send(data);
+      })
   })
+
+  // find specific order
+  // app.get('/order/:id', (req, res) => {
+  //   const id = req.params.id;
+  //   orderCollection.find({ _id: ObjectId(id) })
+  //     .toArray((err, data) => {
+  //       console.log(data[0]);
+  //       res.send(data[0]);
+  //     })
+  // })
 
   // get order by specific user
   app.post('/orderByEmail', (req, res) => {
     const email = req.body.email;
-    orderCollection.find({email: email})
-    .toArray((err, data) => {
-      res.send(data);
-    })
+    orderCollection.find({ email: email })
+      .toArray((err, data) => {
+        res.send(data);
+      })
   })
 
   // add client review
   app.post('/addReview', (req, res) => {
     const newReview = req.body;
     reviewCollection.insertOne(newReview)
-    .then(result => {
-      res.send(result.insertedCount > 0);
-    })
+      .then(result => {
+        res.send(result.insertedCount > 0);
+      })
   })
 
   // get review
   app.get('/review', (req, res) => {
     reviewCollection.find({})
-    .toArray((err, data) => {
-      res.send(data);
-    })
+      .toArray((err, data) => {
+        res.send(data);
+      })
   })
 
   //add admin
   app.post('/addAdmin', (req, res) => {
     const admin = req.body;
     adminCollection.insertOne(admin)
-    .then(result => {
-      res.send(result.insertedCount > 0);
-    })
+      .then(result => {
+        res.send(result.insertedCount > 0);
+      })
   })
 
   // get admin
   app.get('/admin', (req, res) => {
     adminCollection.find({})
-    .toArray((err, data) => {
-      res.send(data);
-    })
+      .toArray((err, data) => {
+        res.send(data);
+      })
   })
 
   // is admin
   app.post('/isAdmin', (req, res) => {
     const email = req.body.email;
-    adminCollection.find({email: email})
-    .toArray((err, admin) => {
-      res.send(admin.length > 0);
-    })
+    adminCollection.find({ email: email })
+      .toArray((err, admin) => {
+        res.send(admin.length > 0);
+      })
   })
 
   // delete service
   app.delete('/delete/:id', (req, res) => {
     const deleteService = req.params.id;
-    serviceCollection.deleteOne({_id: ObjectId(deleteService)})
-    .then( result => {
-      res.send(result.deletedCount > 0);
-    })
+    serviceCollection.deleteOne({ _id: ObjectId(deleteService) })
+      .then(result => {
+        res.send(result.deletedCount > 0);
+      })
   })
-  
+
 });
 
 
